@@ -15,11 +15,7 @@ public class Pipe : MonoBehaviour {
 	
 	}
 
-	void OnTriggerEnter(Collider other) {
-		if(other.tag == "Player"){
-			GameManager._instance.score ++;
-		}
-	}
+
 
 	void OnGUI(){
 		GUILayout.Label("Score:" + GameManager._instance.score);
@@ -33,8 +29,19 @@ public class Pipe : MonoBehaviour {
 		this.transform.localPosition = new Vector3(originX,y,originZ);
 	}
 
+	void OnTriggerEnter(Collider other) {
+		if(other.tag == "Player"){
+			Bird bird = other.GetComponent<Bird>();
+			bird.PlayScoreAudio();
+			GameManager._instance.score ++;
+		}
+	}
+
 	void OnCollisionEnter(Collision collision) {
 		if(collision.gameObject.tag == "Player"){
+			Bird bird = collision.gameObject.GetComponent<Bird>();
+			bird.PlayHitAudio();
+			bird.PlayDieAudio();
 			GameManager._instance.gameState = GameManager.GAMESTATE_END;
 		}
 	}

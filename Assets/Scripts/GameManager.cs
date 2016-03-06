@@ -25,12 +25,17 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(this.gameState == GAMESTATE_MENU){
-			if(Input.GetMouseButtonDown(0)){
+			if(Input.GetMouseButton(0)){
 				gameState = GAMESTATE_PLATYING;
-//				Rigidbody rigid = bird.GetComponent<Rigidbody>();
-//				rigid.useGravity = true;
+
 				bird.SendMessage("GetLife");
 			}
+		}
+
+		if(this.gameState == GameManager.GAMESTATE_END){
+			GameMenu._instance.gameObject.SetActive(true);
+			GameMenu._instance.UpdateScore(this.score);
+			bird.SendMessage("Freeze");
 		}
 	}
 }
