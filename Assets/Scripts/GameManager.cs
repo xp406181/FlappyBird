@@ -2,32 +2,35 @@
 using System.Collections;
 
 public class GameManager : MonoBehaviour {
-	Transform m_BridTrans;
-	public Transform m_FirstBg;
-	float m_DefaultDiffX = 3f;
-	float m_DefaultDiffY = -2.5f;
-	float m_DefaultDiffZ  = -9.5f;
+	public static int GAMESTATE_MENU = 0;//游戏菜单
+	public static int GAMESTATE_PLATYING = 1;//游戏中
+	public static int GAMESTATE_END = 2;//游戏结束
 
-	float m_MaxY = 1.36f;
-	float m_MinY = -1.39f;
+
+	public Transform firstBg;
+	public int score = 0;
+	public int gameState = GAMESTATE_MENU;
+	public static GameManager _instance;
+	private GameObject bird;
+
+	void Awake(){
+		_instance = this;
+	}
+
 	// Use this for initialization
 	void Start () {
-		m_BridTrans = GameObject.FindGameObjectWithTag("Player").transform;
+		bird = GameObject.FindGameObjectWithTag("Player");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Vector3 newPos = new Vector3(m_BridTrans.position.x + m_DefaultDiffX,m_BridTrans.position.y + m_DefaultDiffY, m_BridTrans.position.z + m_DefaultDiffZ);
-		if(newPos.y > m_MaxY)
-		{
-			newPos.y = m_MaxY;
+		if(this.gameState == GAMESTATE_MENU){
+			if(Input.GetMouseButtonDown(0)){
+				gameState = GAMESTATE_PLATYING;
+//				Rigidbody rigid = bird.GetComponent<Rigidbody>();
+//				rigid.useGravity = true;
+				bird.SendMessage("GetLife");
+			}
 		}
-
-		if(newPos.y < m_MinY)
-		{
-			newPos.y = m_MinY;
-		}
-
-		this.transform.position = newPos;
 	}
 }
